@@ -1,0 +1,72 @@
+﻿use airline_system;
+
+select * from flight_instance i where i.flight_number=536;
+
+select * from seat_reservation r where r.flight_number=536;
+
+select max(i.number_of_available_seats) from flight_instance i;
+select * from seat_reservation r;
+select * from fare;
+
+select * from flight_instance i;
+
+select * from seat_reservation r,  flight_instance i where i.flight_number=r.flight_number and r.customer_name='Angela Warren' ;
+
+select * from flight where flight_number=536;
+
+select * from flight h where h.flight_duration LIKE '3h 7m%';
+alter table flight modify flight_duration varchar(6);
+
+
+
+select * from flight;
+
+
+select distinct flight_duration from flight order by CHAR_LENGTH(flight_duration) desc;
+UPDATE FLIGHT SET FLIGHT_DURATION ='3h 0m' where flight_duration LIKE '3h 0m%';
+
+select distinct flight_duration from flight where flight_duration like '3h%m%';
+
+select * from flight;
+
+
+select CHAR_LENGTH(flight_duration) from flight where flight_duration LIKE '2h 30m%';
+
+select substring((select flight_duration from flight where flight_duration LIKE '2h 30m%' limit 1),1,(select CHAR_LENGTH(flight_duration) from flight where flight_duration LIKE '2h 30m%' limit 1)-2);
+
+
+select * from flight;
+select * from airplane_type;
+select * from airplane;
+select * from airport;
+select * from can_land;
+select * from flight_instance;
+
+select * from flight f where f.departure_airport_code='ATL' and f.arrival_airport_code='PHX';
+
+
+
+
+select * from seat_reservation;
+select * from flight_instance;
+select * from flight;
+select * from airport;
+
+
+select s.seat_number,s.customer_name,s.customer_phone,(select a.name from airport a where a.airport_code=f.departure_airport_code) as depart_code, (select a.name from airport a where a.airport_code=f.arrival_airport_code) as arrival_code from seat_reservation s, flight f where s.flight_number=f.flight_number and s.flight_number=536;
+
+select * from fare;
+
+show create table fare;
+
+use airline_system;
+
+alter table fare drop  PRIMARY KEY;
+
+alter table fare drop primary key, add primary key(flight_number, fare_code, restrictions);
+
+use INFORMATION_SCHEMA;
+
+select TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME,
+REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME from KEY_COLUMN_USAGE
+where TABLE_SCHEMA = 'airline_system' and TABLE_NAME = 'fare';
